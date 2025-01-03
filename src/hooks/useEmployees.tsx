@@ -38,9 +38,22 @@ export function useEmployees(){
         } 
     })
 
-    
+    const fireEmployee = useMutation({
+        mutationFn: async(id:string)=>{
+            const newEmployeesArr = Employees.filter((Employee)=>Employee.id !== id);
+            setEmployees(newEmployeesArr);
+            return Employees;
+        },
+        onSuccess:()=>queryClient.invalidateQueries({queryKey:['EmployeesArr']})
+    });
+
+    const updateEmployee = useMutation({
+        mutationFn: async()=>{
+
+        }
+    })
 
 
-    return {Employees:employeeQuery.data??[],addToEmployee}
+    return {Employees:employeeQuery.data??[],addToEmployee,fireEmployee,updateEmployee}
 
 }

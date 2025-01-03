@@ -4,6 +4,7 @@ import { CommandDialog } from "./ui/command";
 import { useFormik } from "formik";
 import { User } from "@/interface/Users";
 import { useEmployees } from "@/hooks/useEmployees";
+import { UserPlus } from "lucide-react";
 
         const Controls = () => {
         const [open, setOpen] = React.useState(false);
@@ -30,8 +31,8 @@ import { useEmployees } from "@/hooks/useEmployees";
             // setEmployees(Arr)
         },[])
     return <>
-    <Button onClickCapture={() => setOpen(true)} variant="outline" className="relative hover:bg-slate-300 dark:hover:bg-slate-800/35 bg-slate-200 dark:bg-slate-800/35 w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" onClick={() => setOpen(true)}>
-            
+    <Button onClickCapture={() => setOpen(true)} variant="outline" className=" rounded-xl   justify-start text-sm text-muted-foreground " onClick={() => setOpen(true)}>
+            <UserPlus />
             Add
     </Button>
     <CommandDialog open={open} onOpenChange={setOpen}>
