@@ -5,11 +5,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 export function useEmployees(){
     const queryClient = useQueryClient()
     const [Employees,setEmployees] = useLocalStorage<User[]>('Employees',[{
-        fName:'Abdelrahman',
-        lName:'Abdue',
-        email:'Abdelrahmanabdue11@gmail.com',
-        userName:'Abdelrahman11',
-        role:'owner',
+        id: 'OWNER',
+        fName: 'Abdelrahman',
+        lName: 'Abdue',
+        email: 'Abdelrahmanabdue11@gmail.com',
+        userName: 'Abdelrahman11',
+        role: 'owner',
     }]);
 
     const employeeQuery = useQuery({
@@ -20,15 +21,26 @@ export function useEmployees(){
     })
 
     const addToEmployee = useMutation({
-        mutationFn:async(formikData:User)=>{
+        mutationFn:async(formikData:Omit<User,'id'>)=>{
             const newEmployee:User = {
-                ...formikData
+                ...formikData,
+                id: `${formikData.userName}-${formikData.role}`
             };
-            
-        }
+            const exists = Employees.some((Employee)=>Employee.id === newEmployee.id)
+            if(exists) return Employees;
+
+            const newEmployeesArr = [...Employees,newEmployee];
+            setEmployees(newEmployeesArr);
+            return Employees
+        },
+        onSuccess:()=>{
+            queryClient.invalidateQueries({queryKey:['EmployeesArr']})
+        } 
     })
 
+    
 
-    return {employeeQuery}
+
+    return {Employees:employeeQuery.data??[],addToEmployee}
 
 }

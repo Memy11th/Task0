@@ -3,18 +3,16 @@ import React from 'react'
 import { CommandDialog } from "./ui/command";
 import { useFormik } from "formik";
 import { User } from "@/interface/Users";
-import { Users } from "@/App";
+import { useEmployees } from "@/hooks/useEmployees";
 
         const Controls = () => {
         const [open, setOpen] = React.useState(false);
-        const FilteredUsers = Users.filter((user)=>user.role !== 'owner');
-        const [Employees,setEmployees]=React.useState<User[]>(FilteredUsers)
+        const {addToEmployee} = useEmployees()
 
         const handleSubmit = (formikValues: Omit<User, "id">) => {
-            Users.push(formikValues)
-            const FilteredUsers = Users.filter((user)=>user.role !== 'owner');
-            setEmployees(FilteredUsers);
-            window.localStorage.setItem('Users',JSON.stringify(Employees));
+            addToEmployee.mutate({
+                ...formikValues,
+            })
             setOpen(false);
         }
         const formik = useFormik({
@@ -64,7 +62,6 @@ import { Users } from "@/App";
         </form>
     </CommandDialog>
 
-    <span>{Employees.map((Employee)=> Employee?.fName)}</span>
     
     </>
     }
