@@ -10,7 +10,7 @@ export function useEmployees(){
         lName: 'Abdue',
         email: 'Abdelrahmanabdue11@gmail.com',
         userName: 'Abdelrahman11',
-        role: 'owner',
+        role: 'Owner',
     }]);
 
     const employeeQuery = useQuery({
@@ -48,16 +48,15 @@ export function useEmployees(){
     });
 
     const updateEmployee = useMutation({
-        mutationFn:async(formikData:Omit<User,'id'>)=>{
+        mutationFn:async(formikData:User)=>{
             const newEmployee:User = {
-                ...formikData,
-                id: `${formikData.userName}-${formikData.role}`
+                ...formikData
             };
-            const exists = Employees.some((Employee)=>Employee.id === newEmployee.id && Employee.role === newEmployee.role)
-            if(exists) return Employees;
 
-            const newEmployeesArr = [...Employees,newEmployee];
-            setEmployees(newEmployeesArr);
+            const updatedEmployees = Employees.map((Employee)=>{
+            return  Employee.id === newEmployee.id ? newEmployee : Employee
+            })
+            setEmployees(updatedEmployees);
             return Employees
         },
         onSuccess:()=>{

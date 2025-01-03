@@ -24,7 +24,10 @@ import { UserPlus } from "lucide-react";
                 userName: "",
                 role: "",
             },
-            onSubmit: handleSubmit
+            onSubmit: ()=>{
+                handleSubmit(formik.values)
+                formik.resetForm();
+            }
         })
         React.useEffect(()=>{
             // const Arr = window.localStorage.getItem('Users');
@@ -37,7 +40,7 @@ import { UserPlus } from "lucide-react";
     </Button>
     <CommandDialog open={open} onOpenChange={setOpen}>
         <h4 className="m-1 p-2 text-start">Add employee</h4>
-        <form  className="p-2 m-1 flex flex-col " onSubmit={formik.handleSubmit} >
+        <form  className="p-2 m-1 flex flex-col dark:text-black " onSubmit={formik.handleSubmit} >
                 <label htmlFor="email" >Email</label>
                 <input name="email" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur}  className="p-2 border rounded-md outline-0 " type="text" />
                 <label htmlFor="fName">First Name</label>
@@ -51,10 +54,10 @@ import { UserPlus } from "lucide-react";
                     <option value="" disabled selected className="cursor-pointer">
                     Select a role
                     </option>
-                    <option value="owner">Owner</option>
-                    <option value="admin">Admin</option>
-                    <option value="superAdmin">Super Admin</option>
-                    <option value="user">User</option>
+                    <option value="Owner">Owner</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Super-Admin">Super Admin</option>
+                    <option value="User">User</option>
                 </select>
 
                 <button className="p-2 border rounded-xl mt-2 bg-green-600 outline-0 " type="submit">
