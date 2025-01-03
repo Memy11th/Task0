@@ -48,9 +48,21 @@ export function useEmployees(){
     });
 
     const updateEmployee = useMutation({
-        mutationFn: async()=>{
+        mutationFn:async(formikData:Omit<User,'id'>)=>{
+            const newEmployee:User = {
+                ...formikData,
+                id: `${formikData.userName}-${formikData.role}`
+            };
+            const exists = Employees.some((Employee)=>Employee.id === newEmployee.id && Employee.role === newEmployee.role)
+            if(exists) return Employees;
 
-        }
+            const newEmployeesArr = [...Employees,newEmployee];
+            setEmployees(newEmployeesArr);
+            return Employees
+        },
+        onSuccess:()=>{
+            queryClient.invalidateQueries({queryKey:['EmployeesArr']})
+        } 
     })
 
 
