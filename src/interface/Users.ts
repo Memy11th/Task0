@@ -4,5 +4,6 @@ export interface User {
     lName:string
     userName:string,
     email:string,
-    role:string
+    role:string,
+    branch:string
 }

@@ -6,9 +6,11 @@ import { User } from "@/interface/Users";
 import { useEmployees } from "@/hooks/useEmployees";
 import { UserPlus } from "lucide-react";
 
+
         const Controls = () => {
+            
         const [open, setOpen] = React.useState(false);
-        const {addToEmployee} = useEmployees()
+        const {addToEmployee,Branches} = useEmployees()
 
         const handleSubmit = (formikValues: Omit<User, "id">) => {
             addToEmployee.mutate({
@@ -23,6 +25,7 @@ import { UserPlus } from "lucide-react";
                 lName: "",
                 userName: "",
                 role: "",
+                branch:""
             },
             onSubmit: ()=>{
                 handleSubmit(formik.values)
@@ -50,15 +53,32 @@ import { UserPlus } from "lucide-react";
                 <label htmlFor="userName">User Name</label>
                 <input name="userName" value={formik.values.userName} onChange={formik.handleChange} onBlur={formik.handleBlur} className="p-2 border rounded-md outline-0 " type="text" />
                 <label htmlFor="role">Role</label>
-                <select name="role" value={formik.values.role} onChange={formik.handleChange} onBlur={formik.handleBlur} className="p-2 border rounded-md outline-0 ">
+                <div className="flex items-center justify-around gap-2">
+                <select name="role" value={formik.values.role} onChange={formik.handleChange} onBlur={formik.handleBlur} className="p-2 border w-1/2 rounded-md outline-0 ">
                     <option value="" disabled selected className="cursor-pointer">
                     Select a role
                     </option>
-                    <option value="Owner">Owner</option>
                     <option value="Admin">Admin</option>
                     <option value="Super-Admin">Super Admin</option>
                     <option value="User">User</option>
                 </select>
+                {formik.values.role ==='Super-Admin' ? <select name="branch" value={formik.values.branch} onChange={formik.handleChange} onBlur={formik.handleBlur} className="p-2 w-1/2 border rounded-md outline-0 ">
+
+                        <option value="" disabled selected className="cursor-pointer">Select branch</option>
+                        <option value='All branches'   className="cursor-pointer">All branches</option>
+
+
+
+                        </select>  : (<select name="branch" value={formik.values.branch} onChange={formik.handleChange} onBlur={formik.handleBlur} className="p-2 w-1/2 border rounded-md outline-0 ">
+
+                            <option value="" disabled selected className="cursor-pointer">Select branch</option>
+                            {Branches.map((branch,index) => <option key={index} value={  branch.location}>{branch.location}</option>)}
+
+
+                            </select>) }
+                
+                </div>
+                
 
                 <button className="p-2 border rounded-xl mt-2 bg-green-600 outline-0 " type="submit">
                     Submit

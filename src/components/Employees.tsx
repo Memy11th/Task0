@@ -17,7 +17,8 @@ const Employees = () => {
           <tr className="grid grid-cols-12">
             <th className="col-span-3 p-2 text-center border-b border-gray-200">Name</th>
             <th className="col-span-3 p-2 text-center border-b border-gray-200">Role</th>
-            <th className="col-span-6 p-2 text-center border-b border-gray-200">Action</th>
+            <th className="col-span-2 p-2 text-center border-b border-gray-200">Branch</th>
+            <th className="col-span-4 p-2 text-center border-b border-gray-200">Action</th>
           </tr>
         </thead>
         <tbody>

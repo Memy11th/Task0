@@ -11,13 +11,25 @@ export function useEmployees(){
         email: 'Abdelrahmanabdue11@gmail.com',
         userName: 'Abdelrahman11',
         role: 'Owner',
+        branch:'All branches'
     }]);
+    const [Filtered,setFiltered] = useLocalStorage<User[]>('Filterd',[]);
+    
+    const Branches = [
+                    {
+                        name:'McDonalds',
+                        location:'Alexandria'
+                    },
+                    {
+                        name:'KFC',
+                        location:'Cairo'
+                    }
+                ]
 
     const employeeQuery = useQuery({
         queryKey:['EmployeesArr'],
         queryFn:()=>Employees,
         initialData:Employees,
-        staleTime:Infinity,
     })
 
     const addToEmployee = useMutation({
@@ -39,12 +51,19 @@ export function useEmployees(){
     })
 
     const fireEmployee = useMutation({
-        mutationFn: async(id:string)=>{
-            const newEmployeesArr = Employees.filter((Employee)=>Employee.id !== id);
+        mutationFn: async (id: string) => {
+            // Filter out the employee with the specified ID
+            const newEmployeesArr = Employees.filter((Employee) => Employee.id !== id);
+            
+            // Update the local storage with the new array
             setEmployees(newEmployeesArr);
+            
             return Employees;
         },
-        onSuccess:()=>queryClient.invalidateQueries({queryKey:['EmployeesArr']})
+        onSuccess: (data) => {
+            // Update the query cache with the updated employees list
+            queryClient.setQueryData(['EmployeesArr'], data);
+        },
     });
 
     const updateEmployee = useMutation({
@@ -52,7 +71,7 @@ export function useEmployees(){
             const newEmployee:User = {
                 ...formikData
             };
-
+                
             const updatedEmployees = Employees.map((Employee)=>{
             return  Employee.id === newEmployee.id ? newEmployee : Employee
             })
@@ -64,7 +83,15 @@ export function useEmployees(){
         } 
     })
 
+    const filterBranch =useMutation({
+        mutationFn:async(filterParam:string)=>{
+            const filtered = Employees.filter((Employee)=> Employee.branch === filterParam || Employee.branch === 'All branches');
+            setFiltered(filtered);
+            return Filtered;
+        }
+    })
 
-    return {Employees:employeeQuery.data??[],addToEmployee,fireEmployee,updateEmployee}
+
+    return {Employees:employeeQuery.data??[],addToEmployee,fireEmployee,updateEmployee,Branches,filterBranch}
 
 }
